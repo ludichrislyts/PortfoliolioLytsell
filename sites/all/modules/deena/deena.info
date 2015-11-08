@@ -1,0 +1,6 @@
+name = Deena
+description = Reflects the opposite side of a dna element back to user
+package = Ajax Attack
+core = 7.x
+files[] = deena.module
+files[] = deena.test

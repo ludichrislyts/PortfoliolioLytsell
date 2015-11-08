@@ -1,0 +1,5 @@
+name = Ajax Title Linker
+description = Display Nodes From Title Clicks
+package = Custom Ajax Attack
+core = 7.x
+files[] = ajax_title_linker.module

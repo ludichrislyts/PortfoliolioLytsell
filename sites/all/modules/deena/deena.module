@@ -1,0 +1,53 @@
+<?php
+function deena_menu()
+{
+    $items = array();
+    $items['deena_input'] = array(
+        'title' => 'DNA Maker',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('deena_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['deena_result_page'] = array(
+        'title' => 'DNA',
+        'page callback' => 'make_dna',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function deena_form()
+{
+    $form['phrase'] = array(
+        '#title' => 'Phrase',
+        '#type' => 'textfield',
+        '#description' => 'Enter the first half of the DNA string',
+        '#element_validate' => array('validate_entry'),
+        '#prefix' => '<i style="color:orange">Hint: only uppercase "A", "T", "C", or "G" will be accepted as valid input',
+        '#suffix' => '</i>',
+        '#required' => TRUE,
+    );
+    $from['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Get your DNA!' // exclamation marks never get old
+    );
+    return $form;
+}
+
+//validate user entry
+function validate_entry($element){
+    //if($element['#value'] != )
+}
+
+function getDNAstring($form, &$form_state){
+    $input = $form_state['values']['phrase'];
+    $output = "";
+    foreach($input as $letter){
+        if($letter == 'G'){
+            $output .= 'C';
+        }
+    }
+    return $input . ", " . $output;
+}
