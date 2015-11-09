@@ -25,11 +25,11 @@ function deena_form()
         '#type' => 'textfield',
         '#description' => 'Enter the first half of the DNA string',
         '#element_validate' => array('validate_entry'),
-        '#prefix' => '<i style="color:orange">Hint: only uppercase "A", "T", "C", or "G" will be accepted as valid input',
-        '#suffix' => '</i>',
+        '#prefix' => '<p style="color:blue">Hint: only uppercase "A", "T", "C", or "G" will be accepted as valid input',
+        '#suffix' => '</>',
         '#required' => TRUE,
     );
-    $from['submit'] = array(
+    $form['submit'] = array(
         '#type' => 'submit',
         '#value' => 'Get your DNA!' // exclamation marks never get old
     );
@@ -39,15 +39,13 @@ function deena_form()
 //validate user entry
 function validate_entry($element){
     $phrase_to_parse = $element['#value'];
-    if(preg_match("/[ACGT]/", $phrase_to_parse)){
-        return true;
-        //
-    }else{
-        return form_set_error("Valid DNA letters are 'A', 'C', 'G', or 'T' (capitalized, please)");
+    if(!preg_match("/[ACGT]/", $phrase_to_parse)){
+        form_error($element, t("Valid DNA letters are 'A', 'C', 'G', or 'T' (capitalized, please)"));
     }
 }
 
-function getDNAstring($input){
+function deena_form_submit($form, &$form_state){
+    $input = $form_state['values']['phrase'];
     $output = "";
     $phrase_to_reflect = str_split($input);
     foreach($phrase_to_reflect as $letter){
@@ -63,5 +61,21 @@ function getDNAstring($input){
             echo "This should never print";
         }
     }
-    return $input . ", " . $output;
+    $result =  '<p>' . $input . '<br/>' . $output;
+    $_SESSION['DNA_string'] = $result;
+    $form_state['redirect'] = 'deena_result_page';
+}
+function make_dna(){
+    $result = $_SESSION['DNA_string'];
+    $output = array(
+        'back_link' => array(
+            '#type' => 'markup',
+            '#markup' => '<a href="deena_input" style="color:blue; text-decoration:none">Try another DNA string!</a><br/>',
+        ),
+        'output' => array(
+            '#type' => 'markup',
+            '#markup' => $result,
+        ),
+    );
+    return $output;
 }
