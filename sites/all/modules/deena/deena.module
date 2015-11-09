@@ -74,7 +74,7 @@ function make_dna(){
         ),
         'output' => array(
             '#type' => 'markup',
-            '#markup' => $result,
+            '#markup' => $result . '<div><img src="sites/all/modules/deena/dna.gif"></div>',
         ),
     );
     return $output;
