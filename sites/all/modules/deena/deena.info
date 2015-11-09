@@ -4,3 +4,4 @@ package = Ajax Attack
 core = 7.x
 files[] = deena.module
 files[] = deena.test
+scripts[] = js/double-helix.jquery.js

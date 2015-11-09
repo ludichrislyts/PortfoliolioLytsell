@@ -61,7 +61,7 @@ function deena_form_submit($form, &$form_state){
             echo "This should never print";
         }
     }
-    $result =  '<p>' . $input . '<br/>' . $output;
+    $result =  [$input, $output];
     $_SESSION['DNA_string'] = $result;
     $form_state['redirect'] = 'deena_result_page';
 }
@@ -74,7 +74,7 @@ function make_dna(){
         ),
         'output' => array(
             '#type' => 'markup',
-            '#markup' => $result . '<div><img src="sites/all/modules/deena/dna.gif"></div>',
+            '#markup' => '<div>' . $result[0] . '</div>' . '<div id="demo"><img src="sites/all/modules/deena/dna.gif"></div><br/>' . '<p>' . $result[1],
         ),
     );
     return $output;
