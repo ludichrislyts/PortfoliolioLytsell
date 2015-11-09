@@ -1,4 +1,3 @@
-        alert("Howdy!");
 (function($, Drupal) {
     Drupal.attachBehaviors = function(context, settings){
         context = context || document;
@@ -7,8 +6,8 @@
         	var canvas = $("<canvas />");
             $.fn.DoubleHelix = function(options) {
                 var settings = {
-                  fps: 24,
-                  fgColor: "0,0,0",
+                  fps: 75,
+                  fgColor: "0,100,255",
                   bgColor: "transparent"
                 }
                 if (options) { settings = $.extend(settings, options);}
@@ -97,7 +96,7 @@
                     draw();
                 });
         	}
-        	canvas.attr({ width: 400, height: $(document).height() });
+        	canvas.attr({ width: 400, height: $(document).height()/2 });
         	$("#demo").append(canvas);
         	canvas.DoubleHelix();
         });
