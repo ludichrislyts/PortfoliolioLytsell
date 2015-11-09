@@ -38,17 +38,29 @@ function deena_form()
 
 //validate user entry
 function validate_entry($element){
-    //if($element['#value'] != )
+    $phrase_to_parse = $element['#value'];
+    if(preg_match("/[ACGT]/", $phrase_to_parse)){
+        return true;
+        //
+    }else{
+        return form_set_error("Valid DNA letters are 'A', 'C', 'G', or 'T' (capitalized, please)");
+    }
 }
 
 function getDNAstring($input){
     $output = "";
-    $phrase_to_parse = str_split($input);
-    foreach($phrase_to_parse as $letter){
+    $phrase_to_reflect = str_split($input);
+    foreach($phrase_to_reflect as $letter){
         if($letter == 'G'){
             $output .= 'C';
         }elseif ($letter == 'C') {
             $output .= 'G';
+        }elseif ($letter == 'A') {
+            $output .= 'T';
+        }elseif($letter == 'T'){
+            $output .= 'A';
+        }else{
+            echo "This should never print";
         }
     }
     return $input . ", " . $output;

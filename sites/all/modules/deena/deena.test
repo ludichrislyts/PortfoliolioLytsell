@@ -14,7 +14,7 @@ class DeenaTestCase extends DrupalUnitTestCase
     {
         //English description
         //displays desired result during test
-        $description = 'A single letter is reflected';
+        $description = 'A single correct letter is reflected';
         //Arrange
         //create input
         $input = 'G';
@@ -28,7 +28,7 @@ class DeenaTestCase extends DrupalUnitTestCase
         $expected_output = 'G, C';
         $this->assertEqual($result, $expected_output, $description);
         /*----------------------------------------------------------------*/
-        $description = 'Two letter input should be refected back';
+        $description = 'Two letter correct input should be refected back';
         //Arrange
         $input = 'GC';
         //Act
@@ -36,8 +36,38 @@ class DeenaTestCase extends DrupalUnitTestCase
         //Assert
         $expected_output = 'GC, CG';
         $this->assertEqual($result, $expected_output, $description);
-
-
+        /*----------------------------------------------------------------*/
+        $description = 'Multiple letter correct input should be refected back';
+        //Arrange
+        $input = 'GCTACG';
+        //Act
+        $result = getDNAstring($input);
+        //Assert
+        $expected_output = 'GCTACG, CGATGC';
+        $this->assertEqual($result, $expected_output, $description);
+        /*----------------------------------------------------------------*/
+        $description = 'Single letter bad input doesn\'t pass';
+        //Arrange
+        $test = array(
+            '#value' => 'f'
+        );
+        //Act
+        $result = validate_entry($test);
+        //Assert
+        $expected_output = form_set_error("Valid DNA letters are 'A', 'C', 'G', or 'T' (capitalized, please)");
+        $this->assertEqual($result, $expected_output, $description);
+        /*----------------------------------------------------------------*/
+        $description = 'Test for valid entry passing the validation';
+        //Arrange
+        $test = array(
+            '#value' => 'AGCT'
+        );
+        //Act
+        $result = validate_entry($test);
+        //Assert
+        $expected_output = true;
+        $this->assertEqual($result, $expected_output, $description);
+        /*----------------------------------------------------------------*/
 
         // $description = 'A title with one word instead of one letter should be capitalized.';
         // $input = 'thor';
