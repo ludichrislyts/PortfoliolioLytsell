@@ -1,31 +1,28 @@
 <?php
 function ajax_title_linker_menu(){
-  $items['ajax_enabled/%/%'] = array(
-    'access arguments' => array('access content'),
-    'page callback' => 'ajax_title_linker_ajax_callback',
-    'page arguments' => array(1, 2),
-    'access' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-  return $items;
+    $items['ajax_enabled/%/%'] = array(
+        'access arguments' => array('access content'),
+        'page callback' => 'ajax_title_linker_ajax_callback',
+        'page arguments' => array(1, 2),
+        'access' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
 }
 
 function ajax_title_linker_ajax_callback($js, $node_id) {
-  $node = node_load($node_id);
-
-  if ($js == 'nojs') {
+    $node = node_load($node_id);
+    if ($js == 'nojs') {
     drupal_goto('node/' . $node->nid);
-  }
-
-  // Get the render array for the node, and render it into actual HTML
-  $build = node_view($node);
-  $html = render($build);
-
-  // Here we prepare an ajax command to insert the node's HTML into our div under News - the wrapper.
-  $commands = array();
-  $commands[] = ajax_command_html('#article-view-wrapper', $html);
-
-  // Render the commands into JSON data format and execute them by printing them to the browser.
-  print ajax_render($commands);
-  exit;  // Exit so Drupal doesn't have a chance to build a whole page.
+    }
+    // Get the render array for the node, and render it into actual HTML
+    $build = node_view($node);
+    $html = render($build);
+    // Here we prepare an ajax command to insert the node's HTML into our div under News - the wrapper.
+    $commands = array();
+    $commands[] = ajax_command_html('#article-view-wrapper', $html);
+    $commands[] = ajax_command_html('#info-tip', null);
+    // Render the commands into JSON data format and execute them by printing them to the browser.
+    print ajax_render($commands);
+    exit;  // Exit so Drupal doesn't have a chance to build a whole page.
 }

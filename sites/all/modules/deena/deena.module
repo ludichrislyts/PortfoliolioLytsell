@@ -41,12 +41,14 @@ function validate_entry($element){
     //if($element['#value'] != )
 }
 
-function getDNAstring($form, &$form_state){
-    $input = $form_state['values']['phrase'];
+function getDNAstring($input){
     $output = "";
-    foreach($input as $letter){
+    $phrase_to_parse = str_split($input);
+    foreach($phrase_to_parse as $letter){
         if($letter == 'G'){
             $output .= 'C';
+        }elseif ($letter == 'C') {
+            $output .= 'G';
         }
     }
     return $input . ", " . $output;
