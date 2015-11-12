@@ -1,0 +1,109 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function ang_menu() {
+  $items = array();
+
+  $items['api/node'] = array(
+    'access arguments' => array('access content'),
+    'page callback'     => 'ang_node_api',
+    'page arguments' => array(2),
+    'delivery callback' => 'drupal_json_output'
+  );
+
+  return $items;
+}
+/**
+ * API callback to return nodes in JSON format
+ *
+ * @param $param
+ * @return array
+ */
+function ang_node_api($param) {
+
+  // If passed param is node id
+  if ($param && is_numeric($param)) {
+    $node = node_load($param);
+    return array(
+      'nid' => $param,
+      'uid' => $node->uid,
+      'title' => check_plain($node->title),
+      'body' => $node->body[LANGUAGE_NONE][0]['value'],
+    );
+  }
+  // If passed param is text value
+  elseif ($param && !is_numeric($param)) {
+    $nodes = db_query("SELECT nid, uid, title FROM {node} n JOIN {field_data_body} b ON n.nid = b.entity_id WHERE n.title LIKE :pattern ORDER BY n.created DESC LIMIT 5", array(':pattern' => '%' . db_like($param) . '%'))->fetchAll();
+    return $nodes;
+  }
+  // If there is no passed param
+  else {
+    $nodes = db_query("SELECT nid, uid, title FROM {node} n JOIN {field_data_body} b ON n.nid = b.entity_id ORDER BY n.created DESC LIMIT 10")->fetchAll();
+    return $nodes;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ang_theme($existing, $type, $theme, $path) {
+  return array(
+    'angular_listing' => array(
+      'template' => 'angular-listing',
+      'variables' => array()
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function ang_block_info() {
+
+  $blocks['angular_nodes'] = array(
+    'info' => t('Node listing'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function ang_block_view($delta = '') {
+
+  $block = array();
+
+  switch ($delta) {
+    case 'angular_nodes':
+      $block['subject'] = t('Latest nodes');
+      $block['content'] = array(
+        '#theme' => 'angular_listing',
+        '#attached' => array(
+          'js' => array(
+            'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js',
+            'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-resource.js',
+            drupal_get_path('module', 'ang') . '/lib/ngDialog/ngDialog.min.js',
+            drupal_get_path('module', 'ang') . '/ang.js',
+          ),
+          'css' => array(
+            drupal_get_path('module', 'ang') . '/lib/ngDialog/ngDialog.min.css',
+            drupal_get_path('module', 'ang') . '/lib/ngDialog/ngDialog-theme-default.min.css',
+          ),
+        ),
+      );
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements template_preprocess_angular_listing().
+ */
+function ang_preprocess_angular_listing(&$vars) {
+  // Can stay empty for now.
+}
+
