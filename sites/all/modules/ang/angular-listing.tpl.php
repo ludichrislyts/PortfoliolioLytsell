@@ -5,7 +5,7 @@
      <h3>Filter</h3>
      <input ng-model="search" ng-change="doSearch()">
 
-      <ul>
+      <ul style="list-style:none">
         <li ng-repeat="node in nodes"><button ng-click="open(node.nid)">Open</button> {{ node.title }}</li>
       </ul>
 
