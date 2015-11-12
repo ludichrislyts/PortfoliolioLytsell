@@ -6,7 +6,7 @@
      <input ng-model="search" ng-change="doSearch()">
 
       <ul style="list-style:none">
-        <li ng-repeat="node in nodes"><button ng-click="open(node.nid)">Open</button> {{ node.title }}</li>
+        <li ng-repeat="node in nodes">{{ node.title }}</br/><button ng-click="open(node.nid)">Open</button></li>
       </ul>
 
      <script type="text/ng-template" id="loadedNodeTemplate">
