@@ -13,6 +13,7 @@ function ajax_title_linker_menu(){
 function ajax_title_linker_ajax_callback($js, $node_id) {
     $node = node_load($node_id);
     if ($js == 'nojs') {
+        drupal_set_message("hi");
     drupal_goto('node/' . $node->nid);
     }
     // Get the render array for the node, and render it into actual HTML
